@@ -1,0 +1,13 @@
+version: "3"
+services:
+  suzuchi-ginkou-server:
+    build: .
+    ports:
+      - "3005:3005"
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    environment:
+      - PORT=3005
+#    env_file:
+#      - ./.env
