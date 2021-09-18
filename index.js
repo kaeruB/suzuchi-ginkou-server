@@ -33,7 +33,7 @@ const BankStateTemporaryMock = {
             amount: 100,
             borrowedBy: 'Kazu',
             category: 'Bilet',
-            description: null,
+            description: 'nidf',
         },
     ],
 }
