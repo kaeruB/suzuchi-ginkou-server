@@ -40,8 +40,13 @@ const BankStateTemporaryMock = {
 
 
 const express = require("express")
+const mongoose = require("mongoose")
 
 const app = express()
+
+mongoose.connect("mongodb://agata:mypassword@suzuchi-ginkou-database:27017/?authSource=admin")
+    .then(() => console.log('successfully connected to data base suzuchi ginkou'))
+    .catch((e) => console.log(e))
 
 app.get("/", (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', "http://localhost:3000")

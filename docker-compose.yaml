@@ -6,3 +6,13 @@ services:
       - "3005:3005"
     environment:
       - PORT=3005
+  suzuchi-ginkou-database:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=agata
+      - MONGO_INITDB_ROOT_PASSWORD=mypassword
+    volumes:
+      - suzuchi-ginkou-db:/data/db
+
+volumes:
+  suzuchi-ginkou-db:
