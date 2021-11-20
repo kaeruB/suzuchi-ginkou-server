@@ -10,4 +10,10 @@
         - /app/node_modules
       environment:
         - NODE_ENV=development
+        - MONGO_USER=agata
+        - MONGO_PASSWORD=mypassword
       command: npm run dev
+    suzuchi-ginkou-database:
+      environment:
+        - MONGO_INITDB_ROOT_USERNAME=agata
+        - MONGO_INITDB_ROOT_PASSWORD=mypassword

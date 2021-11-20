@@ -41,10 +41,11 @@ const BankStateTemporaryMock = {
 
 const express = require("express")
 const mongoose = require("mongoose")
+const {MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT} = require("./config/config");
 
 const app = express()
 
-mongoose.connect("mongodb://agata:mypassword@suzuchi-ginkou-database:27017/?authSource=admin")
+mongoose.connect(`mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`)
     .then(() => console.log('successfully connected to data base suzuchi ginkou'))
     .catch((e) => console.log(e))
 
