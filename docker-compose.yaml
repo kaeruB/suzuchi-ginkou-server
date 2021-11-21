@@ -6,6 +6,8 @@ services:
       - "3005:3005"
     environment:
       - PORT=3005
+    depends_on:
+      - suzuchi-ginkou-database
   suzuchi-ginkou-database:
     image: mongo
     environment:

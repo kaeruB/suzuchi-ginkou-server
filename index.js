@@ -41,13 +41,30 @@ const BankStateTemporaryMock = {
 
 const express = require("express")
 const mongoose = require("mongoose")
-const {MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT} = require("./config/config");
+const {MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT} = require("./config/config")
+
+const postRouter = require("./routes/postRoutes")
 
 const app = express()
 
-mongoose.connect(`mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`)
-    .then(() => console.log('successfully connected to data base suzuchi ginkou'))
-    .catch((e) => console.log(e))
+const mongoUrl = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`
+
+const connectWithRetry = () => {
+    mongoose
+        .connect(mongoUrl, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        })
+        .then(() => console.log('successfully connected to data base suzuchi ginkou'))
+        .catch((e) => {
+            console.log(e)
+            setTimeout(connectWithRetry, 5000)
+        })
+}
+
+connectWithRetry()
+
+app.use(express.json()) // to make the body attached to a request object
 
 app.get("/", (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', "http://localhost:3000")
@@ -58,6 +75,8 @@ app.get("/bank/state", (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', "http://localhost:3000")
     res.send(BankStateTemporaryMock)
 })
+
+app.use("/api/v1/posts", postRouter)
 
 const port = process.env.PORT || 3005
 
