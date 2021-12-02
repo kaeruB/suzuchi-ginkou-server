@@ -1,44 +1,3 @@
-const BankStateTemporaryMock = {
-    summary: {
-        amount: 60000,
-        borrowedBy: 'Kazu',
-        borrowedFrom: 'Agata',
-    },
-    history: [
-        {
-            amount: 100,
-            borrowedBy: 'Kazu',
-            category: 'Sklep',
-            description: 'jajka',
-        },
-        {
-            amount: 100,
-            borrowedBy: 'Kazu',
-            category: 'Sklep',
-            description: 'ikea stół',
-        },
-        {
-            amount: 120,
-            borrowedBy: 'Agata',
-            category: 'Sklep',
-            description: 'truskawki',
-        },
-        {
-            amount: 100,
-            borrowedBy: 'Kazu',
-            category: 'Restauracja',
-            description: 'risotto',
-        },
-        {
-            amount: 100,
-            borrowedBy: 'Kazu',
-            category: 'Bilet',
-            description: 'nidf',
-        },
-    ],
-}
-
-
 const express = require("express")
 const mongoose = require("mongoose")
 const cors = require('cors');
@@ -69,16 +28,6 @@ connectWithRetry()
 
 app.use(express.json()) // to make the body attached to a request object
 app.use(cors({origin: 'http://localhost:3000'})) // to allow content-type header
-
-app.get("/", (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', "http://localhost:3000")
-    res.send([{url: 'https://cdn2.thecatapi.com/images/25b.jpg', height: 'Test message'}])
-})
-
-app.get("/bank/state", (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', "http://localhost:3000")
-    res.send(BankStateTemporaryMock)
-})
 
 app.use("/api/v1/posts", postRouter)
 app.use("/api/v1/users", userRouter)
