@@ -41,10 +41,12 @@ const BankStateTemporaryMock = {
 
 const express = require("express")
 const mongoose = require("mongoose")
+const cors = require('cors');
 const {MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT} = require("./config/config")
 
 const postRouter = require("./routes/postRoutes")
 const userRouter = require("./routes/userRoutes")
+const transactionRouter = require("./routes/transactionRouter")
 
 const app = express()
 
@@ -66,6 +68,7 @@ const connectWithRetry = () => {
 connectWithRetry()
 
 app.use(express.json()) // to make the body attached to a request object
+app.use(cors({origin: 'http://localhost:3000'})) // to allow content-type header
 
 app.get("/", (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', "http://localhost:3000")
@@ -79,6 +82,7 @@ app.get("/bank/state", (req, res) => {
 
 app.use("/api/v1/posts", postRouter)
 app.use("/api/v1/users", userRouter)
+app.use("/api/v1/transactions", transactionRouter)
 
 const port = process.env.PORT || 3005
 
