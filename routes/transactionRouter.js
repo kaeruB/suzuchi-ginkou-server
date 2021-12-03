@@ -13,5 +13,6 @@ router.route("/summary")
 
 router.route("/:id")
     .patch(transactionController.updateTransaction)
+    .delete(transactionController.deleteTransaction)
 
 module.exports = router

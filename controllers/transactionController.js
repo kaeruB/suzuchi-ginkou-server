@@ -82,3 +82,17 @@ exports.getTransactionsSummary = async (req, res, next) => {
         })
     }
 }
+
+exports.deleteTransaction = async (req, res, next) => {
+    try {
+        await Transaction.findByIdAndDelete(req.params.id)
+
+        res.status(200).json({
+            status: 'success'
+        })
+    } catch (e) {
+        res.status(400).json({
+            status: 'fail'
+        })
+    }
+}
