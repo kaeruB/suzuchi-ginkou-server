@@ -11,4 +11,7 @@ router.route("/")
 router.route("/summary")
     .get(transactionController.getTransactionsSummary)
 
+router.route("/:id")
+    .patch(transactionController.updateTransaction)
+
 module.exports = router

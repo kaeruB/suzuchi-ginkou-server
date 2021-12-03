@@ -16,6 +16,10 @@ const transactionSchema = new mongoose.Schema({
     description: {
         type: String,
         required: [true, "Transaction has to have a description."]
+    },
+    date: {
+        type: String,
+        required: [true, "Transaction has to have a specified date."]
     }
 })
 

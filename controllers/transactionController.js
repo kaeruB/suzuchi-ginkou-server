@@ -1,4 +1,5 @@
 const Transaction = require("../models/transactionModels")
+const Post = require("../models/postModels");
 
 exports.getTransactionHistory = async (req, res, next) => {
     try {
@@ -21,6 +22,26 @@ exports.getTransactionHistory = async (req, res, next) => {
 exports.createTransaction = async (req, res, next) => {
     try {
         const transaction = await Transaction.create(req.body)
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                transaction
+            }
+        })
+    } catch (e) {
+        res.status(400).json({
+            status: 'fail'
+        })
+    }
+}
+
+exports.updateTransaction = async (req, res, next) => {
+    try {
+        const transaction = await Transaction.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        })
 
         res.status(200).json({
             status: 'success',
