@@ -1,10 +1,10 @@
 const express = require("express")
 import mongoose from "mongoose";
 const cors = require('cors');
-const {MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT} = require("./src/config/config")
+const {MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT} = require("./config/config")
 
-const userRouter = require("./src/routes/userRoutes")
-const transactionRouter = require("./src/routes/transactionRouter")
+const userRouter = require("./routes/userRoutes")
+const transactionRouter = require("./routes/transactionRouter")
 
 const app = express()
 

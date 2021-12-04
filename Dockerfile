@@ -11,4 +11,4 @@ RUN if [ "$NODE_ENV" = "development" ]; \
 COPY . ./
 ENV PORT 3005
 EXPOSE $PORT
-CMD ["node", "index.ts"]
+CMD ["node", "src/index.ts"]
