@@ -1,7 +1,9 @@
-const Transaction = require("../models/transactionModels")
-const Post = require("../models/postModels");
+import {TransactionType} from "../models/transactionModels";
 
-exports.getTransactionHistory = async (req, res, next) => {
+const Transaction = require("../models/transactionModels")
+import { Request, Response } from "express";
+
+exports.getTransactionHistory = async (req: Request, res: Response) => {
     try {
         const transactions = await Transaction.find()
         res.status(200).json({
@@ -19,7 +21,7 @@ exports.getTransactionHistory = async (req, res, next) => {
 }
 
 
-exports.createTransaction = async (req, res, next) => {
+exports.createTransaction = async (req: Request, res: Response) => {
     try {
         const transaction = await Transaction.create(req.body)
 
@@ -36,7 +38,7 @@ exports.createTransaction = async (req, res, next) => {
     }
 }
 
-exports.updateTransaction = async (req, res, next) => {
+exports.updateTransaction = async (req: Request, res: Response) => {
     try {
         const transaction = await Transaction.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -56,12 +58,12 @@ exports.updateTransaction = async (req, res, next) => {
     }
 }
 
-exports.getTransactionsSummary = async (req, res, next) => {
+exports.getTransactionsSummary = async (req: Request, res: Response) => {
     try {
         const history = await Transaction.find()
 
-        const summary = {}
-        history.forEach(transaction => {
+        const summary: { [borrowedBy: string]: number } = {}
+        history.forEach((transaction: TransactionType) => {
             if (summary[transaction.borrowedBy] == null) {
                 summary[transaction.borrowedBy] = 0;
             }
@@ -83,7 +85,7 @@ exports.getTransactionsSummary = async (req, res, next) => {
     }
 }
 
-exports.deleteTransaction = async (req, res, next) => {
+exports.deleteTransaction = async (req: Request, res: Response) => {
     try {
         await Transaction.findByIdAndDelete(req.params.id)
 

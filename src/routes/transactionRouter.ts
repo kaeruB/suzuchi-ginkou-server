@@ -1,8 +1,7 @@
-const express = require("express")
+import {Router} from "express";
 
 const transactionController = require("../controllers/transactionController")
-
-const router = express.Router()
+const router = Router()
 
 router.route("/")
     .get(transactionController.getTransactionHistory)

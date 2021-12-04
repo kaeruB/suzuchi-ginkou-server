@@ -1,8 +1,9 @@
 const User = require("../models/userModel")
+import { Request, Response } from "express";
 
 const bcrypt = require("bcryptjs")
 
-exports.signUp = async (req, res) => {
+exports.signUp = async (req: Request, res: Response) => {
     const {username, password} = req.body
 
     try {
@@ -24,7 +25,7 @@ exports.signUp = async (req, res) => {
     }
 }
 
-exports.login = async (req, res) => {
+exports.login = async (req: Request, res: Response) => {
     const {username, password} = req.body
 
     try {

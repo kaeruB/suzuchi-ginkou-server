@@ -1,8 +1,7 @@
-const express = require("express")
+import {Router} from "express";
 
 const authController = require("../controllers/authController")
-
-const router = express.Router()
+const router = Router()
 
 router.post("/signup", authController.signUp)
 router.post("/login", authController.login)

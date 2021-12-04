@@ -1,6 +1,14 @@
-const mongoose = require("mongoose")
+import mongoose from "mongoose"
 
-const transactionSchema = new mongoose.Schema({
+export type TransactionType = {
+    amount: number
+    borrowedBy: string
+    category: string
+    description: string,
+    date: string
+}
+
+const transactionSchema = new mongoose.Schema<TransactionType>({
     amount: {
         type: Number,
         require: [true, "Transaction has to have an amount."]
