@@ -5,7 +5,7 @@ export type TransactionType = {
     borrowedBy: string
     category: string
     description: string,
-    date: string
+    timestamp: number
 }
 
 const transactionSchema = new mongoose.Schema<TransactionType>({
@@ -25,9 +25,9 @@ const transactionSchema = new mongoose.Schema<TransactionType>({
         type: String,
         required: [true, "Transaction has to have a description."]
     },
-    date: {
-        type: String,
-        required: [true, "Transaction has to have a specified date."]
+    timestamp: {
+        type: Number,
+        required: [true, "Transaction has to have a specified timestamp."]
     }
 })
 
