@@ -1,9 +1,22 @@
 import mongoose from "mongoose"
 
+export enum Person {
+    KAZU = 'Kazu',
+    AGATA = 'Agata',
+}
+
+export enum Category {
+    SHOPPING = 'Shopping',
+    HOME = 'Home',
+    HEALTH = 'Health',
+    ENTERTAINMENT = 'Entertainment',
+    OTHER = 'Other'
+}
+
 export type TransactionType = {
     amount: number
-    borrowedBy: string
-    category: string
+    borrowedBy: Person
+    category: Category
     description: string,
     timestamp: number
 }
