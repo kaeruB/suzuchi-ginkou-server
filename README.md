@@ -13,7 +13,7 @@ Track borrowed to your boyfriend money.
 After you run Docker, build the container:
 
 ```bash
-docker-compose up -d --build
+docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml up -d --build
 ```
 
 
@@ -30,5 +30,5 @@ Open [http://localhost:3005](http://localhost:3005) with your browser to see the
 To remove the container:
 
 ```bash
-docker-compose down -v
+docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml down
 ```
