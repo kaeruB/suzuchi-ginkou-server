@@ -1,5 +1,8 @@
 version: "3"
 services:
+  nginx:
+    ports:
+      - "3005:3005"
   suzuchi-ginkou-server:
     build:
       context: .
