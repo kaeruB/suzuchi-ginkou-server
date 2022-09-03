@@ -23,7 +23,7 @@ const connectWithRetry = () => {
 connectWithRetry()
 
 app.use(express.json()) // to make the body attached to a request object
-app.use(cors({origin: 'https://suzuchi-ginkou-client-6azsjhbtz-agatabogacz.vercel.app/'})) // to allow content-type header
+app.use(cors({origin: 'http://139.177.178.87'})) // to allow content-type header
 
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/transactions", transactionRouter)
