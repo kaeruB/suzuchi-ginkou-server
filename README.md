@@ -6,7 +6,7 @@ Track borrowed to your boyfriend money.
 * Docker Compose
 * Node.js
 * Express
-* TypeScript (to be added)
+* TypeScript
 
 ## Getting Started
 
