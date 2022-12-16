@@ -1,9 +1,11 @@
+import {RequestWithSession} from "../models/requestModels";
+
 const User = require("../models/userModel")
-import {Request, Response} from "express";
+import {Response} from "express";
 
 const bcrypt = require("bcryptjs")
 
-exports.signUp = async (req: Request, res: Response) => {
+exports.signUp = async (req: RequestWithSession, res: Response) => {
     const {username, password} = req.body
 
     try {
@@ -12,7 +14,7 @@ exports.signUp = async (req: Request, res: Response) => {
             username,
             password: hashPassword
         });
-        (req as any).session.user = newUser // assign user to session
+        req.session.user = newUser
         res.status(201).json({
             status: 'success',
             data: {
@@ -26,7 +28,7 @@ exports.signUp = async (req: Request, res: Response) => {
     }
 }
 
-exports.login = async (req: Request, res: Response) => {
+exports.login = async (req: RequestWithSession, res: Response) => {
     const {username, password} = req.body
 
     try {
@@ -42,7 +44,7 @@ exports.login = async (req: Request, res: Response) => {
         const isCorrect = await bcrypt.compare(password, user.password)
 
         if (isCorrect) {
-            (req as any).session.user = user // assign user to session, if successfully logged in
+            req.session.user = user
             res.status(200).json({
                 status: 'success'
             })

@@ -34,12 +34,15 @@ app.use(session({
         resave: false,
         saveUninitialized: false,
         httpOnly: true,
-        maxAge: 30000
+        maxAge: 1000 * 60 * 30 // 30 min
     }
 }))
 
 app.use(express.json()) // to make the body attached to a request object
-app.use(cors({origin: ALLOWED_CLIENT_URL}))
+app.use(cors({
+    credentials: true,
+    origin: ALLOWED_CLIENT_URL
+}))
 
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/transactions", transactionRouter)

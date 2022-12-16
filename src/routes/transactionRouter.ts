@@ -1,17 +1,19 @@
 import {Router} from "express";
 
 const transactionController = require("../controllers/transactionController")
+const protect = require('../middleware/authMiddleware')
+
 const router = Router()
 
 router.route("/")
-    .get(transactionController.getTransactionHistory)
-    .post(transactionController.createTransaction)
+    .get(protect, transactionController.getTransactionHistory)
+    .post(protect, transactionController.createTransaction)
 
 router.route("/summary")
-    .get(transactionController.getTransactionsSummary)
+    .get(protect, transactionController.getTransactionsSummary)
 
 router.route("/:id")
-    .patch(transactionController.updateTransaction)
-    .delete(transactionController.deleteTransaction)
+    .patch(protect, transactionController.updateTransaction)
+    .delete(protect, transactionController.deleteTransaction)
 
 module.exports = router
