@@ -37,7 +37,7 @@ exports.login = async (req: RequestWithSession, res: Response) => {
         if (!user) {
             return res.status(404).json({
                 status: 'fail',
-                message: 'user not found'
+                message: 'User not found'
             })
         }
 
@@ -51,12 +51,34 @@ exports.login = async (req: RequestWithSession, res: Response) => {
         } else {
             res.status(400).json({
                 status: 'fail',
-                message: 'incorrect username or password'
+                message: 'Incorrect username or password'
             })
         }
     } catch (e) {
         res.status(400).json({
             status: "fail"
+        })
+    }
+}
+
+exports.logout = async (req: RequestWithSession, res: Response) => {
+    try {
+        if (req.session.user) {
+            // req.session.destroy() todo remove session
+
+            res.status(200).json({
+                status: 'success'
+            })
+        } else {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'User not found'
+            })
+        }
+    } catch (e) {
+        res.status(400).json({
+            status: "fail",
+            message: "Unexpected error while logging out"
         })
     }
 }

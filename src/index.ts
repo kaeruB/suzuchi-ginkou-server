@@ -30,11 +30,11 @@ app.use(session({
     store: MongoStore.create({mongoUrl}),
     secret: 'test', // TODO add secret
     cookie: {
-        secure: false,
+        secure: false, // todo turn to true
         resave: false,
         saveUninitialized: false,
         httpOnly: true,
-        maxAge: 1000 * 60 * 30 // 30 min
+        maxAge: 1000 * 60 * 10 // 10 min
     }
 }))
 
