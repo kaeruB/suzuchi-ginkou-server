@@ -5,7 +5,7 @@ import mongoose from "mongoose"
 const session = require("express-session")
 import MongoStore from 'connect-mongo'
 const cors = require('cors');
-const {MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT} = require("./config/config")
+const {MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT, SESSION_SECRET} = require("./config/config")
 
 const userRouter = require("./routes/userRoutes")
 const transactionRouter = require("./routes/transactionRouter")
@@ -28,7 +28,7 @@ connectWithRetry()
 
 app.use(session({
     store: MongoStore.create({mongoUrl}),
-    secret: 'test', // TODO add secret
+    secret: SESSION_SECRET,
     cookie: {
         secure: false, // todo turn to true
         resave: false,
