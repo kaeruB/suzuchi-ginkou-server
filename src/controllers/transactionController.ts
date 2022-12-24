@@ -1,11 +1,13 @@
 import {TransactionType} from "../models/transactionModels";
+import {Response} from "express";
+import {RequestWithSession} from "../models/requestModels";
 
 const Transaction = require("../models/transactionModels")
-import {Request, Response} from "express";
 
-exports.getTransactionHistory = async (req: Request, res: Response) => {
+exports.getTransactionHistory = async (req: RequestWithSession, res: Response) => {
     try {
-        const transactions = await Transaction.find()
+        const username = req.session && req.session.user.username
+        const transactions = await Transaction.find({username})
         res.status(200).json({
             status: 'success',
             results: transactions.length,
@@ -21,9 +23,13 @@ exports.getTransactionHistory = async (req: Request, res: Response) => {
 }
 
 
-exports.createTransaction = async (req: Request, res: Response) => {
+exports.createTransaction = async (req: RequestWithSession, res: Response) => {
     try {
-        const transaction = await Transaction.create(req.body)
+        const username = req.session && req.session.user.username
+        const transaction = await Transaction.create({
+            ...req.body,
+            username
+        })
 
         res.status(200).json({
             status: 'success',
@@ -38,7 +44,7 @@ exports.createTransaction = async (req: Request, res: Response) => {
     }
 }
 
-exports.updateTransaction = async (req: Request, res: Response) => {
+exports.updateTransaction = async (req: RequestWithSession, res: Response) => {
     try {
         const transaction = await Transaction.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -58,7 +64,7 @@ exports.updateTransaction = async (req: Request, res: Response) => {
     }
 }
 
-exports.getTransactionsSummary = async (req: Request, res: Response) => {
+exports.getTransactionsSummary = async (req: RequestWithSession, res: Response) => {
     const getMoneyGroupedByPerson = (history: Array<TransactionType>) => {
         const summary: { [borrowedBy: string]: number } = {}
         history.forEach((transaction: TransactionType) => {
@@ -71,8 +77,11 @@ exports.getTransactionsSummary = async (req: Request, res: Response) => {
     }
 
     try {
-        const historyListLength: number | undefined = (req.query.historyListLength && Number.parseInt(req.query.historyListLength as string)) || undefined
-        const history = await Transaction.find().sort({'timestamp': -1})
+        const username = req.session && req.session.user.username
+
+        const historyListLength: number | undefined =
+            (req.query.historyListLength && Number.parseInt(req.query.historyListLength as string)) || undefined
+        const history = await Transaction.find({username}).sort({'timestamp': -1})
         const summary: { [borrowedBy: string]: number } = getMoneyGroupedByPerson(history)
         const limitedHistory = (historyListLength && historyListLength - 1 < history.length) ?
             history.slice(0, historyListLength) : history
@@ -92,7 +101,7 @@ exports.getTransactionsSummary = async (req: Request, res: Response) => {
     }
 }
 
-exports.deleteTransaction = async (req: Request, res: Response) => {
+exports.deleteTransaction = async (req: RequestWithSession, res: Response) => {
     try {
         await Transaction.findByIdAndDelete(req.params.id)
 

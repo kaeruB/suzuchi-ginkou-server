@@ -14,13 +14,15 @@ exports.signUp = async (req: RequestWithSession, res: Response) => {
             username,
             password: hashPassword
         });
-        req.session.user = newUser
-        res.status(201).json({
-            status: 'success',
-            data: {
-                user: newUser
-            }
-        })
+        if (req.session) {
+            req.session.user = newUser
+            res.status(201).json({
+                status: 'success',
+                data: {
+                    user: newUser
+                }
+            })
+        }
     } catch (e) {
         res.status(400).json({
             status: "fail"
@@ -43,7 +45,7 @@ exports.login = async (req: RequestWithSession, res: Response) => {
 
         const isCorrect = await bcrypt.compare(password, user.password)
 
-        if (isCorrect) {
+        if (isCorrect && req.session) {
             req.session.user = user
             res.status(200).json({
                 status: 'success'
@@ -63,7 +65,7 @@ exports.login = async (req: RequestWithSession, res: Response) => {
 
 exports.logout = async (req: RequestWithSession, res: Response) => {
     try {
-        if (req.session.user) {
+        if (req.session && req.session.user) {
             // req.session.destroy() todo remove session
 
             res.status(200).json({

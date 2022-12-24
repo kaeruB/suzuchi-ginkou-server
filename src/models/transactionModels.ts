@@ -18,7 +18,8 @@ export type TransactionType = {
     borrowedBy: Person
     category: Category
     description: string,
-    timestamp: number
+    timestamp: number,
+    username: string
 }
 
 const transactionSchema = new mongoose.Schema<TransactionType>({
@@ -41,6 +42,10 @@ const transactionSchema = new mongoose.Schema<TransactionType>({
     timestamp: {
         type: Number,
         required: [true, "Transaction has to have a specified timestamp."]
+    },
+    username: {
+        type: String,
+        required: [true, "Transaction must be bound to a specific user."]
     }
 })
 
