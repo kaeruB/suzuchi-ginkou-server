@@ -1,6 +1,7 @@
 import {TransactionType} from "../models/transactionModels";
 import {Response} from "express";
 import {RequestWithSession} from "../models/requestModels";
+import {STATUS_BAD_REQUEST, STATUS_CREATED, STATUS_OK} from "../utils/constants/commons";
 
 const Transaction = require("../models/transactionModels")
 
@@ -8,7 +9,7 @@ exports.getTransactionHistory = async (req: RequestWithSession, res: Response) =
     try {
         const username = req.session && req.session.user.username
         const transactions = await Transaction.find({username})
-        res.status(200).json({
+        res.status(STATUS_OK).json({
             status: 'success',
             results: transactions.length,
             data: {
@@ -16,7 +17,7 @@ exports.getTransactionHistory = async (req: RequestWithSession, res: Response) =
             }
         })
     } catch (e) {
-        res.status(400).json({
+        res.status(STATUS_BAD_REQUEST).json({
             status: 'fail'
         })
     }
@@ -31,14 +32,14 @@ exports.createTransaction = async (req: RequestWithSession, res: Response) => {
             username
         })
 
-        res.status(200).json({
+        res.status(STATUS_CREATED).json({
             status: 'success',
             data: {
                 transaction
             }
         })
     } catch (e) {
-        res.status(400).json({
+        res.status(STATUS_BAD_REQUEST).json({
             status: 'fail'
         })
     }
@@ -51,14 +52,14 @@ exports.updateTransaction = async (req: RequestWithSession, res: Response) => {
             runValidators: true
         })
 
-        res.status(200).json({
+        res.status(STATUS_OK).json({
             status: 'success',
             data: {
                 transaction
             }
         })
     } catch (e) {
-        res.status(400).json({
+        res.status(STATUS_BAD_REQUEST).json({
             status: 'fail'
         })
     }
@@ -86,7 +87,7 @@ exports.getTransactionsSummary = async (req: RequestWithSession, res: Response) 
         const limitedHistory = (historyListLength && historyListLength - 1 < history.length) ?
             history.slice(0, historyListLength) : history
 
-        res.status(200).json({
+        res.status(STATUS_OK).json({
             status: 'success',
             results: Object.keys(summary).length,
             data: {
@@ -95,7 +96,7 @@ exports.getTransactionsSummary = async (req: RequestWithSession, res: Response) 
             }
         })
     } catch (e) {
-        res.status(400).json({
+        res.status(STATUS_BAD_REQUEST).json({
             status: 'fail'
         })
     }
@@ -105,11 +106,11 @@ exports.deleteTransaction = async (req: RequestWithSession, res: Response) => {
     try {
         await Transaction.findByIdAndDelete(req.params.id)
 
-        res.status(200).json({
+        res.status(STATUS_OK).json({
             status: 'success'
         })
     } catch (e) {
-        res.status(400).json({
+        res.status(STATUS_BAD_REQUEST).json({
             status: 'fail'
         })
     }
