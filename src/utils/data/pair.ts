@@ -31,7 +31,7 @@ export const retrievePairsUsersDetails = async (userId: string): Promise<UserIdT
     {$match: {userId}},
     {
       $lookup: {
-        from: 'pairmodels',
+        from: 'pairs',
         localField: 'pairId',
         foreignField: 'pairId',
         as: 'innerPairs',
@@ -46,7 +46,7 @@ export const retrievePairsUsersDetails = async (userId: string): Promise<UserIdT
     },
     {
       $lookup: {
-        from: 'usermodels',
+        from: 'users',
         localField: 'foreignUserId',
         foreignField: 'userId',
         as: 'userDetails',
@@ -98,7 +98,7 @@ export const retrievePairsSummaries = async (userId: string): Promise<PairsSumma
       {$match: {userId}},
       {
         $lookup: {
-          from: 'transactionmodels',
+          from: 'transactions',
           localField: 'pairId',
           foreignField: 'pairId',
           as: 'transactions',
