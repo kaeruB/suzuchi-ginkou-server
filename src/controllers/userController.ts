@@ -99,7 +99,7 @@ exports.login = async (req: RequestWithSession<UserCredits>, res: Response) => {
 exports.logout = async (req: RequestWithSession<UserCredits>, res: Response) => {
   try {
     if (req.session && req.session.user) {
-      // req.session.destroy() todo remove session
+      req.session.destroy()
 
       res.status(STATUS_OK).json({
         status: 'success'

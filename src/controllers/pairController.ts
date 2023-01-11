@@ -68,7 +68,7 @@ exports.createPair = async (req: RequestWithSession<{ partnerId: string }>, res:
     } else {
       res.status(WRONG_INPUT_ERR_CODE).json({
         status: 'fail',
-        message: 'Users ids not correct.'
+        message: 'User id not correct.'
       })
     }
 

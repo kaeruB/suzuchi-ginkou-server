@@ -33,7 +33,7 @@ export interface Transaction {
 export interface RequestWithSession<M> extends Request {
   session?: {
     user: User,
-    // destroy: () => void
+    destroy: () => void
   },
   body: M
 }
