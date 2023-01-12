@@ -1,13 +1,12 @@
 import {Response} from "express";
 import {checkPasswordBeforeHashing} from "../utils/functions/validators";
-import {
-  DUPLICATE_SYMBOL_MONGO_ERR
-} from "../utils/constants/commons";
+import {DUPLICATE_SYMBOL_MONGO_ERR} from "../utils/constants/commons";
 import {RequestWithSession, User, UserCredits, UserDetails,} from "../utils/typescript/interfaces";
 import {
   STATUS_BAD_REQUEST,
   STATUS_CREATED,
-  STATUS_NOT_FOUND, STATUS_OK,
+  STATUS_NOT_FOUND,
+  STATUS_OK,
   WRONG_INPUT_ERR_CODE
 } from "../utils/constants/responseCodes";
 
@@ -38,7 +37,10 @@ exports.signUp = async (req: RequestWithSession<User>, res: Response) => {
         res.status(STATUS_CREATED).json({
           status: 'success',
           data: {
-            user: newUser
+            user: {
+              name: newUser.name,
+              avatar: newUser.avatar
+            }
           }
         })
       }
@@ -67,7 +69,7 @@ exports.login = async (req: RequestWithSession<UserCredits>, res: Response) => {
   const user: UserCredits = req.body
 
   try {
-    const userInDatabase = await UserModel.findOne({userId: user.userId})
+    const userInDatabase: User = await UserModel.findOne({userId: user.userId})
 
     if (!userInDatabase) {
       return res.status(STATUS_NOT_FOUND).json({
@@ -81,7 +83,13 @@ exports.login = async (req: RequestWithSession<UserCredits>, res: Response) => {
     if (isCorrect && req.session) {
       req.session.user = userInDatabase
       res.status(STATUS_OK).json({
-        status: 'success'
+        status: 'success',
+        data: {
+          user: {
+            name: userInDatabase.name,
+            avatar: userInDatabase.avatar
+          }
+        }
       })
     } else {
       res.status(STATUS_BAD_REQUEST).json({
@@ -123,7 +131,7 @@ exports.updateUserNameAndAvatar = async (req: RequestWithSession<UserDetails>, r
     const updatedUserDetails: UserDetails = req.body
 
     const userId = req.session && req.session.user.userId
-    const userDetails = await UserModel
+    const userDetails: User = await UserModel
       .findOneAndUpdate({userId}, updatedUserDetails, {
         new: true,
         runValidators: true
@@ -132,7 +140,10 @@ exports.updateUserNameAndAvatar = async (req: RequestWithSession<UserDetails>, r
     res.status(STATUS_OK).json({
       status: 'success',
       data: {
-        userDetails
+        user: {
+          name: userDetails.name,
+          avatar: userDetails.avatar
+        }
       }
     })
   } catch (e) {

@@ -126,6 +126,12 @@ export const retrievePairsSummaries = async (userId: string): Promise<PairsSumma
           amount: 1,
         }
       },
+      {
+        $sort: {
+          amount: -1,
+          pairId: 1
+        }
+      }
     ])
 
   return createPairIdToSummaryObject(transactionsSummaries)
