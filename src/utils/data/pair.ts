@@ -66,9 +66,9 @@ export const retrievePairsUsersDetails = async (userId: string): Promise<UserIdT
 }
 
 const createPairIdToSummaryObject = (
-  transactionsSummaries: Array<{ pairId: string, borrowedBy: string, amount: number }>
+  transactionsSummaries: Array<{ pairId: string, userWhoPaid: string, amount: number }>
 ) => transactionsSummaries.reduce(
-  (acc: PairsSummary, row: { pairId: string, borrowedBy: string, amount: number }) => {
+  (acc: PairsSummary, row: { pairId: string, userWhoPaid: string, amount: number }) => {
     if (acc[row.pairId] == null) {
       const usersInPairIds = retrieveUsersIdsFromPairId(row.pairId)
       acc[row.pairId] = {
@@ -77,8 +77,8 @@ const createPairIdToSummaryObject = (
       }
     }
 
-    if (row.borrowedBy) {
-      acc[row.pairId][row.borrowedBy] += row.amount
+    if (row.userWhoPaid) {
+      acc[row.pairId][row.userWhoPaid] += row.amount
     }
     return acc
   }, {})
@@ -87,13 +87,13 @@ export const retrievePairsSummaries = async (userId: string): Promise<PairsSumma
   /**
    * SQL equivalent for @userId:
    *
-   * SELECT P.pairId, T.borrowedBy, COUNT(T.borrowedBy)
+   * SELECT P.pairId, T.userWhoPaid, COUNT(T.userWhoPaid)
    * FROM Pair as P
    * LEFT JOIN Transaction as T
    * ON P.pairId = T.pairId
-   *  GROUP BY P.pairId, T.borrowedBy
+   *  GROUP BY P.pairId, T.userWhoPaid
    */
-  const transactionsSummaries: Array<{ pairId: string, borrowedBy: string, amount: number }> =
+  const transactionsSummaries: Array<{ pairId: string, userWhoPaid: string, amount: number }> =
     await PairModel.aggregate([
       {$match: {userId}},
       {
@@ -114,7 +114,7 @@ export const retrievePairsSummaries = async (userId: string): Promise<PairsSumma
         $group: {
           _id: {
             pairId: "$pairId",
-            borrowedBy: "$transactions.borrowedBy"
+            userWhoPaid: "$transactions.userWhoPaid"
           },
           amount: {$sum: "$transactions.amount"}
         }
@@ -122,7 +122,7 @@ export const retrievePairsSummaries = async (userId: string): Promise<PairsSumma
       {
         $project: {
           pairId: '$_id.pairId',
-          borrowedBy: '$_id.borrowedBy',
+          userWhoPaid: '$_id.userWhoPaid',
           amount: 1,
         }
       },

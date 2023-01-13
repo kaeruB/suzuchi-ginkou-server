@@ -24,7 +24,7 @@ enum Category {
 export interface Transaction {
   pairId: string,
   amount: number
-  borrowedBy: string
+  userWhoPaid: string
   category: Category
   description: string,
   timestamp: number,
@@ -43,5 +43,5 @@ export interface Pair {
   userId: string
 }
 
-export type Summary = { [borrowedBy: string]: number }
+export type Summary = { [userWhoPaid: string]: number }
 export type PairsSummary = { [pairId: string]: Summary }

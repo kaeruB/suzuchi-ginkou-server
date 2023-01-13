@@ -12,9 +12,9 @@ const transactionSchema = new mongoose.Schema<Transaction>({
     type: Number,
     require: [true, "Transaction has to have an amount."]
   },
-  borrowedBy: {
+  userWhoPaid: {
     type: String,
-    required: [true, "Transaction has to have specified who borrowed the money."]
+    required: [true, "Transaction has to have specified who paid the money."]
   },
   category: {
     type: String,

@@ -9,11 +9,11 @@ const validateReqBodyForPairMismatch = (req: RequestWithSession<Transaction>, re
 
   const usersIdsInPair = pairId && retrieveUsersIdsFromPairId(pairId)
 
-  if (!usersIdsInPair || !usersIdsInPair.find(uId => uId === transactionFromReq.borrowedBy)) {
+  if (!usersIdsInPair || !usersIdsInPair.find(uId => uId === transactionFromReq.userWhoPaid)) {
     return res.status(STATUS_UNAUTHORIZED)
       .json({
         status: 'fail',
-        message: `Wrong value in borrowedBy field - there is no user ${transactionFromReq.borrowedBy} for pair ${usersIdsInPair[0]} and ${usersIdsInPair[1]}`
+        message: `Wrong value in userWhoPaid field - there is no user ${transactionFromReq.userWhoPaid} for pair ${usersIdsInPair[0]} and ${usersIdsInPair[1]}`
       })
   }
 

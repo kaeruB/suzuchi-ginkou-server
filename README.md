@@ -1,5 +1,5 @@
 #鈴地銀行 - Server
-Track borrowed to your boyfriend money.
+Track money with your partner or friend.
 
 ## About
 * Docker

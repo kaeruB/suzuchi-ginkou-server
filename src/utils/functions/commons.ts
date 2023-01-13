@@ -15,13 +15,13 @@ export const retrieveUsersIdsFromPairId =
 export const groupMoneyByUserInPair = (
   history: Array<Transaction>,
   usersIdsInPair: Array<string>
-): { [borrowedBy: string]: number } => {
+): { [userWhoPaid: string]: number } => {
   const summary: Summary = {
     [usersIdsInPair[0]]: 0,
     [usersIdsInPair[1]]: 0
   }
   history.forEach((transaction: Transaction) => {
-    summary[transaction.borrowedBy] += transaction.amount
+    summary[transaction.userWhoPaid] += transaction.amount
   })
   return summary
 }
