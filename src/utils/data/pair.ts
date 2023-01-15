@@ -1,34 +1,34 @@
-import {PairsSummary, UserDetails, UserIdToDetails} from "../typescript/interfaces";
+import {PairsSummary, UserDetails, UserEmailToDetails} from "../typescript/interfaces";
 import {retrieveUsersIdsFromPairId} from "../functions/commons";
 
 const PairModel = require("../../models/pairModel")
 
-const createUserIdToDetailsObject = (
-  usersDetailsWithUserId: Array<UserDetails & { userId: string }>
-): UserIdToDetails =>
-  usersDetailsWithUserId.reduce((acc: UserIdToDetails, current: UserDetails & { userId: string }) => {
-    acc[current.userId] = {
+const createUserEmailToDetailsObject = (
+  usersDetailsWithUserEmail: Array<UserDetails & { userEmail: string }>
+): UserEmailToDetails =>
+  usersDetailsWithUserEmail.reduce((acc: UserEmailToDetails, current: UserDetails & { userEmail: string }) => {
+    acc[current.userEmail] = {
       name: current.name,
       avatar: current.avatar
     }
     return acc
   }, {})
 
-export const retrievePairsUsersDetails = async (userId: string): Promise<UserIdToDetails> => {
+export const retrievePairsUsersDetails = async (userEmail: string): Promise<UserEmailToDetails> => {
   /**
-   * SQL equivalent for @userId:
+   * SQL equivalent for @userEmail:
    *
-   * SELECT U.userId, U.name, U.avatar
+   * SELECT U.userEmail, U.name, U.avatar
    * FROM Pair as P1
-   * WHERE P1.userId=@userId
+   * WHERE P1.userEmail=@userEmail
    *  JOIN Pair as P2
    *  ON P1.pairId = P2.pairId
-   *  WHERE NOT P2.userId=@userId
+   *  WHERE NOT P2.userEmail=@userEmail
    *   JOIN User as U
-   *   ON U.userId = P2.userId
+   *   ON U.userEmail = P2.userEmail
    */
-  const usersDetailsInPairs: Array<UserDetails & { userId: string }> = await PairModel.aggregate([
-    {$match: {userId}},
+  const usersDetailsInPairs: Array<UserDetails & { userEmail: string }> = await PairModel.aggregate([
+    {$match: {userEmail}},
     {
       $lookup: {
         from: 'pairs',
@@ -38,31 +38,31 @@ export const retrievePairsUsersDetails = async (userId: string): Promise<UserIdT
       }
     },
     {$unwind: "$innerPairs"},
-    {$match: {"innerPairs.userId": {$ne: userId}}},
+    {$match: {"innerPairs.userEmail": {$ne: userEmail}}},
     {
       $project: {
-        'foreignUserId': '$innerPairs.userId',
+        'foreignUserEmail': '$innerPairs.userEmail',
       }
     },
     {
       $lookup: {
         from: 'users',
-        localField: 'foreignUserId',
-        foreignField: 'userId',
+        localField: 'foreignUserEmail',
+        foreignField: 'userEmail',
         as: 'userDetails',
       },
     },
     {$unwind: "$userDetails"},
     {
       $project: {
-        userId: '$userDetails.userId',
+        userEmail: '$userDetails.userEmail',
         name: '$userDetails.name',
         avatar: '$userDetails.avatar',
       }
     },
   ])
 
-  return createUserIdToDetailsObject(usersDetailsInPairs)
+  return createUserEmailToDetailsObject(usersDetailsInPairs)
 }
 
 const createPairIdToSummaryObject = (
@@ -83,9 +83,9 @@ const createPairIdToSummaryObject = (
     return acc
   }, {})
 
-export const retrievePairsSummaries = async (userId: string): Promise<PairsSummary> => {
+export const retrievePairsSummaries = async (userEmail: string): Promise<PairsSummary> => {
   /**
-   * SQL equivalent for @userId:
+   * SQL equivalent for @userEmail:
    *
    * SELECT P.pairId, T.userWhoPaid, COUNT(T.userWhoPaid)
    * FROM Pair as P
@@ -95,7 +95,7 @@ export const retrievePairsSummaries = async (userId: string): Promise<PairsSumma
    */
   const transactionsSummaries: Array<{ pairId: string, userWhoPaid: string, amount: number }> =
     await PairModel.aggregate([
-      {$match: {userId}},
+      {$match: {userEmail}},
       {
         $lookup: {
           from: 'transactions',

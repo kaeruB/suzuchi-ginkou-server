@@ -1,14 +1,14 @@
 import mongoose from "mongoose"
-import {MAX_USERNAME_LENGTH, MIN_USERNAME_LENGTH} from "../config/constraints";
+import {MAX_USER_EMAIL_LENGTH, MIN_USER_EMAIL_LENGTH} from "../config/constraints";
 import {User} from "../utils/typescript/interfaces";
 
 const userSchema = new mongoose.Schema<User>({
-  userId: {
+  userEmail: {
     type: String,
-    required: [true, 'User must have a unique login.'],
+    required: [true, 'User must have specified a unique email address.'],
     unique: true,
-    maxlength: [MAX_USERNAME_LENGTH, `User id can have maximum ${MAX_USERNAME_LENGTH} characters.`],
-    minlength: [MIN_USERNAME_LENGTH, `User id should have at least ${MIN_USERNAME_LENGTH} characters.`],
+    maxlength: [MAX_USER_EMAIL_LENGTH, `Email address can have maximum ${MAX_USER_EMAIL_LENGTH} characters.`],
+    minlength: [MIN_USER_EMAIL_LENGTH, `Email should have at least ${MIN_USER_EMAIL_LENGTH} characters.`],
     immutable: true
   },
   password: {
@@ -18,8 +18,8 @@ const userSchema = new mongoose.Schema<User>({
   name: {
     type: String,
     required: [true, 'User must have a name to be displayed.'],
-    maxlength: [MAX_USERNAME_LENGTH, `Username can have maximum ${MAX_USERNAME_LENGTH} characters.`],
-    minlength: [MIN_USERNAME_LENGTH, `Username should have at least ${MIN_USERNAME_LENGTH} characters.`]
+    maxlength: [MAX_USER_EMAIL_LENGTH, `Username can have maximum ${MAX_USER_EMAIL_LENGTH} characters.`],
+    minlength: [MIN_USER_EMAIL_LENGTH, `Username should have at least ${MIN_USER_EMAIL_LENGTH} characters.`]
   },
   avatar: {
     type: String,

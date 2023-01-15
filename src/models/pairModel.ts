@@ -7,7 +7,7 @@ const pairSchema = new mongoose.Schema<Pair>({
     required: true,
     unique: false
   },
-  userId: {
+  userEmail: {
     type: String,
     required: true
   }

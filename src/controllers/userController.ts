@@ -16,7 +16,7 @@ const bcrypt = require("bcryptjs")
 exports.signUp = async (req: RequestWithSession<User>, res: Response) => {
   const user: User = req.body
 
-  const passwordConstraintsError = checkPasswordBeforeHashing(user.userId, user.password)
+  const passwordConstraintsError = checkPasswordBeforeHashing(user.userEmail, user.password)
 
   if (passwordConstraintsError) {
     res.status(WRONG_INPUT_ERR_CODE).json({
@@ -27,7 +27,7 @@ exports.signUp = async (req: RequestWithSession<User>, res: Response) => {
     try {
       const hashPassword = await bcrypt.hash(user.password, 12)
       const newUser = await UserModel.create({
-        userId: user.userId,
+        userEmail: user.userEmail,
         password: hashPassword,
         name: user.name,
         avatar: user.avatar
@@ -48,7 +48,7 @@ exports.signUp = async (req: RequestWithSession<User>, res: Response) => {
       if (e.code && e.code === DUPLICATE_SYMBOL_MONGO_ERR) {
         res.status(WRONG_INPUT_ERR_CODE).json({
           status: "fail",
-          message: "The username is already in use. Specify a different username."
+          message: "The email address is already in use. Specify a different email address."
         })
       } else if (e.message) {
         res.status(WRONG_INPUT_ERR_CODE).json({
@@ -69,7 +69,7 @@ exports.login = async (req: RequestWithSession<UserCredits>, res: Response) => {
   const user: UserCredits = req.body
 
   try {
-    const userInDatabase: User = await UserModel.findOne({userId: user.userId})
+    const userInDatabase: User = await UserModel.findOne({userEmail: user.userEmail})
 
     if (!userInDatabase) {
       return res.status(STATUS_NOT_FOUND).json({
@@ -94,7 +94,7 @@ exports.login = async (req: RequestWithSession<UserCredits>, res: Response) => {
     } else {
       res.status(STATUS_BAD_REQUEST).json({
         status: 'fail',
-        message: 'Incorrect username or password'
+        message: 'Incorrect email address or password'
       })
     }
   } catch (e) {
@@ -130,9 +130,9 @@ exports.updateUserNameAndAvatar = async (req: RequestWithSession<UserDetails>, r
   try {
     const updatedUserDetails: UserDetails = req.body
 
-    const userId = req.session && req.session.user.userId
+    const userEmail = req.session && req.session.user.userEmail
     const userDetails: User = await UserModel
-      .findOneAndUpdate({userId}, updatedUserDetails, {
+      .findOneAndUpdate({userEmail}, updatedUserDetails, {
         new: true,
         runValidators: true
       })

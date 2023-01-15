@@ -1,7 +1,7 @@
 import {Request} from "express";
 
 export type UserCredits = {
-  userId: string,
+  userEmail: string,
   password: string,
 }
 
@@ -11,7 +11,7 @@ export type UserDetails = {
 }
 
 export type User = UserCredits & UserDetails
-export type UserIdToDetails = { [userId: string]: UserDetails }
+export type UserEmailToDetails = { [userEmail: string]: UserDetails }
 
 enum Category {
   SHOPPING = 'Shopping',
@@ -40,7 +40,7 @@ export interface RequestWithSession<M> extends Request {
 
 export interface Pair {
   pairId: string,
-  userId: string
+  userEmail: string
 }
 
 export type Summary = { [userWhoPaid: string]: number }

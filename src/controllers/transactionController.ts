@@ -10,10 +10,10 @@ const PairModel = require("../models/pairModel")
 
 exports.createTransaction = async (req: RequestWithSession<Transaction>, res: Response) => {
   try {
-    const userId = req.session && req.session.user.userId
+    const userEmail = req.session && req.session.user.userEmail
     const pairId = req.params.pairId
 
-    const doesPairExist = await PairModel.findOne({pairId, userId})
+    const doesPairExist = await PairModel.findOne({pairId, userEmail})
 
     if (doesPairExist) {
       const transaction = await TransactionModel.create({
@@ -30,7 +30,7 @@ exports.createTransaction = async (req: RequestWithSession<Transaction>, res: Re
     } else {
       res.status(STATUS_BAD_REQUEST).json({
         status: 'fail',
-        message: `Pair with id ${pairId} is not found for user ${userId}.`
+        message: `Pair with id ${pairId} is not found for user ${userEmail}.`
       })
     }
   } catch (e) {

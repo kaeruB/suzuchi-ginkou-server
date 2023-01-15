@@ -9,7 +9,7 @@ const protectPair = (req: RequestWithSession<{}>, res: Response, next: NextFunct
 
   const usersIdsInPair = pairId && retrieveUsersIdsFromPairId(pairId)
 
-  if (!usersIdsInPair || !user || !usersIdsInPair.find(u => u === user.userId)) {
+  if (!usersIdsInPair || !user || !usersIdsInPair.find(u => u === user.userEmail)) {
     return res.status(STATUS_UNAUTHORIZED)
       .json({
         status: 'fail',

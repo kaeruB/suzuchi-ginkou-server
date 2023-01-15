@@ -10,10 +10,10 @@ export const hasPasswordLetter = (password: string): boolean => {
   return LETTERS_REGEX.test(password)
 }
 
-export const isPasswordDifferentThanUsername = (
-  userId: string,
+export const isPasswordDifferentThanUserEmail = (
+  userEmail: string,
   password: string
-): boolean => password !== userId
+): boolean => password !== userEmail
 
 export const isStringLongEnough = (
   str: string,
@@ -21,12 +21,12 @@ export const isStringLongEnough = (
 ): boolean => str.length >= minStringLength
 
 
-export const checkPasswordBeforeHashing = (userId: string, password: string): string | null => {
+export const checkPasswordBeforeHashing = (userEmail: string, password: string): string | null => {
   if (!isStringLongEnough(password, MIN_PASSWORD_LENGTH)) {
     return `Password should have at least ${MIN_PASSWORD_LENGTH} characters.`
   }
-  if (!isPasswordDifferentThanUsername(userId, password)) {
-    return "Password shouldn't be the same as username."
+  if (!isPasswordDifferentThanUserEmail(userEmail, password)) {
+    return "Password shouldn't be the same as email address."
   }
   if (!hasPasswordNumber(password)) {
     return 'Password should contain at least one number.'

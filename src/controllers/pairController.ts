@@ -1,5 +1,5 @@
 import {Response} from "express";
-import {Pair, RequestWithSession, UserIdToDetails} from "../utils/typescript/interfaces";
+import {Pair, RequestWithSession, UserEmailToDetails} from "../utils/typescript/interfaces";
 import {createPairId} from "../utils/functions/commons";
 import {retrievePairsSummaries, retrievePairsUsersDetails} from "../utils/data/pair";
 import {retrieveUsersDetails} from "../utils/data/user";
@@ -10,13 +10,13 @@ const UserModel = require("../models/userModel")
 
 exports.getPairsSummaries = async (req: RequestWithSession<Pair>, res: Response) => {
   try {
-    const userId = (req.session && req.session.user.userId) as string
+    const userEmail = (req.session && req.session.user.userEmail) as string
 
-    const currentUserDetails = await retrieveUsersDetails([userId])
-    const usersDetails: UserIdToDetails = await retrievePairsUsersDetails(userId)
-    usersDetails[userId] = currentUserDetails[userId]
+    const currentUserDetails = await retrieveUsersDetails([userEmail])
+    const usersDetails: UserEmailToDetails = await retrievePairsUsersDetails(userEmail)
+    usersDetails[userEmail] = currentUserDetails[userEmail]
 
-    const pairsSummaries = await retrievePairsSummaries(userId)
+    const pairsSummaries = await retrievePairsSummaries(userEmail)
 
     res.status(STATUS_OK).json({
       status: 'success',
@@ -32,25 +32,25 @@ exports.getPairsSummaries = async (req: RequestWithSession<Pair>, res: Response)
   }
 }
 
-exports.createPair = async (req: RequestWithSession<{ partnerId: string }>, res: Response) => {
-  const {partnerId} = req.body
+exports.createPair = async (req: RequestWithSession<{ partnerEmail: string }>, res: Response) => {
+  const {partnerEmail} = req.body
 
   try {
-    const isPartnerIdInDatabase = await UserModel.findOne({userId: partnerId})
-    const creatorUserId = req.session && req.session.user.userId
+    const isPartnerEmailInDatabase = await UserModel.findOne({userEmail: partnerEmail})
+    const creatorUserEmail = req.session && req.session.user.userEmail
 
-    const pairId = isPartnerIdInDatabase && createPairId(partnerId, creatorUserId)
+    const pairId = isPartnerEmailInDatabase && createPairId(partnerEmail, creatorUserEmail)
 
     if (pairId) {
       const pairInDatabase: Pair = await PairModel.findOne({pairId})
       if (!pairInDatabase) {
         const newPair1 = await PairModel.create({
           pairId,
-          userId: creatorUserId
+          userEmail: creatorUserEmail
         });
         const newPair2 = await PairModel.create({
           pairId,
-          userId: partnerId
+          userEmail: partnerEmail
         });
 
         res.status(STATUS_CREATED).json({
@@ -62,13 +62,13 @@ exports.createPair = async (req: RequestWithSession<{ partnerId: string }>, res:
       } else {
         res.status(WRONG_INPUT_ERR_CODE).json({
           status: 'fail',
-          message: `The pair for ${creatorUserId} and ${partnerId} already exists.`
+          message: `The pair for ${creatorUserEmail} and ${partnerEmail} already exists.`
         })
       }
     } else {
       res.status(WRONG_INPUT_ERR_CODE).json({
         status: 'fail',
-        message: 'User id not correct.'
+        message: 'Address email not correct.'
       })
     }
 
