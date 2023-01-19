@@ -32,7 +32,7 @@ app.use(session({
   store: MongoStore.create({mongoUrl}),
   secret: SESSION_SECRET,
   cookie: {
-    secure: false, // todo turn to true
+    secure: true,
     resave: false,
     saveUninitialized: false,
     httpOnly: true,
