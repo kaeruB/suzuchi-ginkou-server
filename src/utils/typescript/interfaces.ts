@@ -1,4 +1,5 @@
 import {Request} from "express";
+import {NODE_ENV_DEV, NODE_ENV_PROD} from "../constants/commons";
 
 export type UserCredits = {
   userEmail: string,
@@ -45,3 +46,5 @@ export interface Pair {
 
 export type Summary = { [userWhoPaid: string]: number }
 export type PairsSummary = { [pairId: string]: Summary }
+
+export type NODE_ENVS = typeof NODE_ENV_DEV | typeof NODE_ENV_PROD
