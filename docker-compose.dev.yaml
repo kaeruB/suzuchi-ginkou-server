@@ -12,6 +12,7 @@
         - NODE_ENV=development
         - MONGO_USER=agata
         - MONGO_PASSWORD=mypassword
+        - SESSION_SECRET=devsecret
       command: npm run dev
     suzuchi-ginkou-database:
       environment:

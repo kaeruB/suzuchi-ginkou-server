@@ -1,5 +1,5 @@
-#鈴地銀行 - Server
-Track borrowed to your boyfriend money.
+# 鈴地銀行 - Server
+Track money with your partner or friend.
 
 ## About
 * Docker
@@ -23,9 +23,11 @@ Check if your container runs
 docker ps
 ```
 
-You should see a volume with name ``` server_suzuchi-ginkou-server ```.
+You should see two containers, names will be similar to: ``` suzuchi-ginkou-server ``` and ``` suzuchi-ginkou-database ```.
 
-Open [http://localhost:3005](http://localhost:3005) with your browser to see the result.
+The server will be running at port 3005.
+In case of any problems, see the logs for the server container:
+``` docker logs suzuchi-ginkou-server ```
 
 To remove the container:
 
