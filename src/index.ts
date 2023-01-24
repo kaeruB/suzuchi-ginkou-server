@@ -9,6 +9,7 @@ const session = require("express-session")
 import MongoStore from 'connect-mongo'
 import {NODE_ENVS} from "./utils/typescript/interfaces";
 import {NODE_ENV_DEV, NODE_ENV_PROD} from "./utils/constants/commons";
+import {SESSION_MAX_AGE} from "./config/constraints";
 
 const cors = require('cors');
 const {MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT, SESSION_SECRET} = require("./config/config")
@@ -45,7 +46,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     httpOnly: true,
-    maxAge: 1000 * 60 * 100 // 100 min
+    maxAge: SESSION_MAX_AGE
   }
 }))
 
