@@ -4,6 +4,7 @@ import {groupMoneyByUserInPair, retrieveUsersIdsFromPairId} from "../utils/funct
 import {retrieveUsersDetails} from "../utils/data/user";
 import {retrieveTransactions} from "../utils/data/transaction";
 import {STATUS_BAD_REQUEST, STATUS_CREATED, STATUS_OK} from "../utils/constants/responseCodes";
+import {DEFAULT_HISTORY_ITEMS} from "../utils/constants/commons";
 
 const TransactionModel = require("../models/transactionModel")
 const PairModel = require("../models/pairModel")
@@ -68,17 +69,22 @@ exports.getTransactionsSummary = async (req: RequestWithSession<{}>, res: Respon
   try {
     const pairId = req.params.pairId
     const usersIdsInPair = retrieveUsersIdsFromPairId(pairId)
+    const noOfTransactionsSetByUser = Number.parseInt(req.query.historyListLength as string)
     const noOfTransactionsToRetrieve: number = req.query.historyListLength ?
-      Number.parseInt(req.query.historyListLength as string) : 5
+      noOfTransactionsSetByUser :
+      DEFAULT_HISTORY_ITEMS
 
     const transactions: Array<Transaction> = await retrieveTransactions(pairId)
     const summary = groupMoneyByUserInPair(transactions, usersIdsInPair)
     const usersDetails = await retrieveUsersDetails(usersIdsInPair)
 
+    const totalNoOfTransactions = transactions.length
+
     res.status(STATUS_OK).json({
       status: 'success',
       data: {
         transactions: transactions.slice(0, noOfTransactionsToRetrieve),
+        totalNoOfTransactions,
         summary,
         usersDetails
       }
