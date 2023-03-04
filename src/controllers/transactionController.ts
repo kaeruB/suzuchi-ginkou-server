@@ -1,6 +1,6 @@
 import {Response} from "express";
 import {RequestWithSession, Transaction} from "../utils/typescript/interfaces";
-import {groupMoneyByUserInPair, decodePairUserIds} from "../utils/functions/commons";
+import {groupMoneyByUserInPair, decodePairIdToUserIds} from "../utils/functions/commons";
 import {retrieveUsersDetails} from "../utils/data/user";
 import {retrieveTransactions} from "../utils/data/transaction";
 import {STATUS_BAD_REQUEST, STATUS_CREATED, STATUS_OK} from "../utils/constants/responseCodes";
@@ -68,7 +68,7 @@ exports.updateTransaction = async (req: RequestWithSession<Transaction>, res: Re
 exports.getTransactionsSummary = async (req: RequestWithSession<{}>, res: Response) => {
   try {
     const pairId = req.params.pairId
-    const pairUserIds = decodePairUserIds(pairId)
+    const pairUserIds = decodePairIdToUserIds(pairId)
     const noOfTransactionsSetByUser = Number.parseInt(req.query.historyListLength as string)
     const noOfTransactionsToRetrieve: number = req.query.historyListLength ?
       noOfTransactionsSetByUser :

@@ -1,5 +1,5 @@
 import {PairsSummary, UserDetails, UserEmailToDetails} from "../typescript/interfaces";
-import {decodePairUserIds} from "../functions/commons";
+import {decodePairIdToUserIds} from "../functions/commons";
 
 const PairModel = require("../../models/pairModel")
 
@@ -70,7 +70,7 @@ const createPairIdToSummaryObject = (
 ) => transactionsSummaries.reduce(
   (acc: PairsSummary, row: { pairId: string, userWhoPaid: string, amount: number }) => {
     if (acc[row.pairId] == null) {
-      const pairUserIds = decodePairUserIds(row.pairId)
+      const pairUserIds = decodePairIdToUserIds(row.pairId)
       acc[row.pairId] = {
         [pairUserIds[0]]: 0,
         [pairUserIds[1]]: 0

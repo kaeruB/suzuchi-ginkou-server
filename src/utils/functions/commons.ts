@@ -9,7 +9,7 @@ export const createPairId =
     return false
   }
 
-export const decodePairUserIds =
+export const decodePairIdToUserIds =
   (pairId: string): [string, string] => pairId.split(PAIR_ID_SEPARATOR) as [string, string]
 
 export const groupMoneyByUserInPair = (
