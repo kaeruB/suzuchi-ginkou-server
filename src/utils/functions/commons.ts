@@ -9,16 +9,16 @@ export const createPairId =
     return false
   }
 
-export const retrieveUsersIdsFromPairId =
-  (pairId: string): Array<string> => pairId.split(PAIR_ID_SEPARATOR)
+export const decodePairIdToUserIds =
+  (pairId: string): [string, string] => pairId.split(PAIR_ID_SEPARATOR) as [string, string]
 
 export const groupMoneyByUserInPair = (
   history: Array<Transaction>,
-  usersIdsInPair: Array<string>
+  pairUserIds: Array<string>
 ): { [userWhoPaid: string]: number } => {
   const summary: Summary = {
-    [usersIdsInPair[0]]: 0,
-    [usersIdsInPair[1]]: 0
+    [pairUserIds[0]]: 0,
+    [pairUserIds[1]]: 0
   }
   history.forEach((transaction: Transaction) => {
     summary[transaction.userWhoPaid] += transaction.amount

@@ -1,9 +1,10 @@
 import {Response} from "express";
 import {RequestWithSession, Transaction} from "../utils/typescript/interfaces";
-import {groupMoneyByUserInPair, retrieveUsersIdsFromPairId} from "../utils/functions/commons";
+import {groupMoneyByUserInPair, decodePairIdToUserIds} from "../utils/functions/commons";
 import {retrieveUsersDetails} from "../utils/data/user";
 import {retrieveTransactions} from "../utils/data/transaction";
 import {STATUS_BAD_REQUEST, STATUS_CREATED, STATUS_OK} from "../utils/constants/responseCodes";
+import {DEFAULT_HISTORY_ITEMS} from "../utils/constants/commons";
 
 const TransactionModel = require("../models/transactionModel")
 const PairModel = require("../models/pairModel")
@@ -67,18 +68,23 @@ exports.updateTransaction = async (req: RequestWithSession<Transaction>, res: Re
 exports.getTransactionsSummary = async (req: RequestWithSession<{}>, res: Response) => {
   try {
     const pairId = req.params.pairId
-    const usersIdsInPair = retrieveUsersIdsFromPairId(pairId)
+    const pairUserIds = decodePairIdToUserIds(pairId)
+    const noOfTransactionsSetByUser = Number.parseInt(req.query.historyListLength as string)
     const noOfTransactionsToRetrieve: number = req.query.historyListLength ?
-      Number.parseInt(req.query.historyListLength as string) : 5
+      noOfTransactionsSetByUser :
+      DEFAULT_HISTORY_ITEMS
 
     const transactions: Array<Transaction> = await retrieveTransactions(pairId)
-    const summary = groupMoneyByUserInPair(transactions, usersIdsInPair)
-    const usersDetails = await retrieveUsersDetails(usersIdsInPair)
+    const summary = groupMoneyByUserInPair(transactions, pairUserIds)
+    const usersDetails = await retrieveUsersDetails(pairUserIds)
+
+    const totalTransactions = transactions.length
 
     res.status(STATUS_OK).json({
       status: 'success',
       data: {
         transactions: transactions.slice(0, noOfTransactionsToRetrieve),
+        totalTransactions,
         summary,
         usersDetails
       }
