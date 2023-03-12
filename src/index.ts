@@ -1,6 +1,7 @@
 import {ALLOWED_CLIENT_URL} from "./config/url";
 
 import path from "path";
+import { fileURLToPath } from 'url';
 
 import express from "express";
 import mongoose from "mongoose"
@@ -63,6 +64,10 @@ app.use("/api/v1/users", userRouter)
 app.use("/api/v1/pairs", pairRouter)
 
 const port = process.env.PORT || 3005
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // @ts-ignore
 if (nodeEnv === NODE_ENV_DEV) {
