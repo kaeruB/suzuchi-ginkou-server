@@ -21,7 +21,7 @@ import {createServer} from "https";
 
 const app = express()
 
-const nodeEnv: NODE_ENVS = process.env.NODE_ENV as NODE_ENVS || NODE_ENV_DEV
+const nodeEnv: NODE_ENVS = NODE_ENV_PROD // process.env.NODE_ENV as NODE_ENVS || NODE_ENV_DEV
 
 const mongoUrl = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`
 
@@ -64,6 +64,7 @@ app.use("/api/v1/pairs", pairRouter)
 
 const port = process.env.PORT || 3005
 
+// @ts-ignore
 if (nodeEnv === NODE_ENV_DEV) {
   app.listen(port, () => console.log(`Listening on port ${port}, environment ${nodeEnv}`))
 } else {
