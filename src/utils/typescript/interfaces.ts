@@ -31,6 +31,8 @@ export interface Transaction {
   timestamp: number,
 }
 
+// todo
+// @ts-ignore
 export interface RequestWithSession<M> extends Request {
   session?: {
     user: User,

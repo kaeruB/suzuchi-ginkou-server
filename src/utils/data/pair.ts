@@ -1,7 +1,6 @@
 import {PairsSummary, UserDetails, UserEmailToDetails} from "../typescript/interfaces";
 import {decodePairIdToUserIds} from "../functions/commons";
-
-const PairModel = require("../../models/pairModel")
+import {PairModel} from "../../models/pairModel";
 
 const createUserEmailToDetailsObject = (
   usersDetailsWithUserEmail: Array<UserDetails & { userEmail: string }>

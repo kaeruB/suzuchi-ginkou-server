@@ -1,6 +1,5 @@
 import {Transaction} from "../typescript/interfaces";
-
-const TransactionModel = require("../../models/transactionModel")
+import {TransactionModel} from "../../models/transactionModel";
 
 export const retrieveTransactions = async (pairId: string): Promise<Array<Transaction>> => {
   const transactions: Array<Transaction> = await TransactionModel.aggregate([

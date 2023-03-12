@@ -4,11 +4,10 @@ import {createPairId} from "../utils/functions/commons";
 import {retrievePairsSummaries, retrievePairsUsersDetails} from "../utils/data/pair";
 import {retrieveUsersDetails} from "../utils/data/user";
 import {STATUS_BAD_REQUEST, STATUS_CREATED, STATUS_OK, WRONG_INPUT_ERR_CODE} from "../utils/constants/responseCodes";
+import {UserModel} from "../models/userModel";
+import {PairModel} from "../models/pairModel";
 
-const PairModel = require("../models/pairModel")
-const UserModel = require("../models/userModel")
-
-exports.getPairsSummaries = async (req: RequestWithSession<Pair>, res: Response) => {
+export const getPairsSummaries = async (req: RequestWithSession<Pair>, res: Response) => {
   try {
     const userEmail = (req.session && req.session.user.userEmail) as string
 
@@ -32,7 +31,7 @@ exports.getPairsSummaries = async (req: RequestWithSession<Pair>, res: Response)
   }
 }
 
-exports.createPair = async (req: RequestWithSession<{ partnerEmail: string }>, res: Response) => {
+export const createPair = async (req: RequestWithSession<{ partnerEmail: string }>, res: Response) => {
   const {partnerEmail} = req.body
 
   try {
@@ -42,7 +41,7 @@ exports.createPair = async (req: RequestWithSession<{ partnerEmail: string }>, r
     const pairId = isPartnerEmailInDatabase && createPairId(partnerEmail, creatorUserEmail)
 
     if (pairId) {
-      const pairInDatabase: Pair = await PairModel.findOne({pairId})
+      const pairInDatabase: Pair | null = await PairModel.findOne({pairId})
       if (!pairInDatabase) {
         const newPair1 = await PairModel.create({
           pairId,

@@ -5,11 +5,10 @@ import {retrieveUsersDetails} from "../utils/data/user";
 import {retrieveTransactions} from "../utils/data/transaction";
 import {STATUS_BAD_REQUEST, STATUS_CREATED, STATUS_OK} from "../utils/constants/responseCodes";
 import {DEFAULT_HISTORY_ITEMS} from "../utils/constants/commons";
+import {PairModel} from "../models/pairModel";
+import {TransactionModel} from "../models/transactionModel";
 
-const TransactionModel = require("../models/transactionModel")
-const PairModel = require("../models/pairModel")
-
-exports.createTransaction = async (req: RequestWithSession<Transaction>, res: Response) => {
+export const createTransaction = async (req: RequestWithSession<Transaction>, res: Response) => {
   try {
     const userEmail = req.session && req.session.user.userEmail
     const pairId = req.params.pairId
@@ -41,7 +40,7 @@ exports.createTransaction = async (req: RequestWithSession<Transaction>, res: Re
   }
 }
 
-exports.updateTransaction = async (req: RequestWithSession<Transaction>, res: Response) => {
+export const updateTransaction = async (req: RequestWithSession<Transaction>, res: Response) => {
   try {
     const updatedTransaction: Transaction = req.body
     const transactionId = req.params.id
@@ -65,7 +64,7 @@ exports.updateTransaction = async (req: RequestWithSession<Transaction>, res: Re
   }
 }
 
-exports.getTransactionsSummary = async (req: RequestWithSession<{}>, res: Response) => {
+export const getTransactionsSummary = async (req: RequestWithSession<{}>, res: Response) => {
   try {
     const pairId = req.params.pairId
     const pairUserIds = decodePairIdToUserIds(pairId)
@@ -97,7 +96,7 @@ exports.getTransactionsSummary = async (req: RequestWithSession<{}>, res: Respon
   }
 }
 
-exports.deleteTransaction = async (req: RequestWithSession<{}>, res: Response) => {
+export const deleteTransaction = async (req: RequestWithSession<{}>, res: Response) => {
   try {
     const pairId = req.params.pairId
     const transactionId = req.params.id

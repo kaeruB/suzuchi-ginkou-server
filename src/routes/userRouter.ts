@@ -1,12 +1,15 @@
+// @ts-nocheck
+
 import {Router} from "express";
+import {protectUser} from "../middleware/userAuthMiddleware";
+import {login, logout, signUp, updateUserNameAndAvatar} from "../controllers/userController";
 
-const userController = require("../controllers/userController")
 const router = Router()
-const protectUser = require('../middleware/userAuthMiddleware')
 
-router.post("/signup", userController.signUp)
-router.post("/login", userController.login)
-router.post("/logout", protectUser, userController.logout)
-router.post("/update", protectUser, userController.updateUserNameAndAvatar)
+router.post("/signup", signUp)
+router.post("/login", login)
+router.post("/logout", protectUser, logout)
+router.post("/update", protectUser, updateUserNameAndAvatar)
 
-module.exports = router
+export default router
+// module.exports = router

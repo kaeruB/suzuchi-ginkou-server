@@ -10,10 +10,11 @@ import {
   WRONG_INPUT_ERR_CODE
 } from "../utils/constants/responseCodes";
 
-const UserModel = require("../models/userModel")
-const bcrypt = require("bcryptjs")
+import bcrypt from 'bcryptjs';
+import {UserModel} from "../models/userModel";
 
-exports.signUp = async (req: RequestWithSession<User>, res: Response) => {
+
+export const signUp = async (req: RequestWithSession<User>, res: Response) => {
   const user: User = req.body
 
   const passwordConstraintsError = checkPasswordBeforeHashing(user.userEmail, user.password)
@@ -65,11 +66,11 @@ exports.signUp = async (req: RequestWithSession<User>, res: Response) => {
   }
 }
 
-exports.login = async (req: RequestWithSession<UserCredits>, res: Response) => {
+export const login = async (req: RequestWithSession<UserCredits>, res: Response) => {
   const user: UserCredits = req.body
 
   try {
-    const userInDatabase: User = await UserModel.findOne({userEmail: user.userEmail})
+    const userInDatabase: User | null = await UserModel.findOne({userEmail: user.userEmail})
 
     if (!userInDatabase) {
       return res.status(STATUS_NOT_FOUND).json({
@@ -104,7 +105,7 @@ exports.login = async (req: RequestWithSession<UserCredits>, res: Response) => {
   }
 }
 
-exports.logout = async (req: RequestWithSession<UserCredits>, res: Response) => {
+export const logout = async (req: RequestWithSession<UserCredits>, res: Response) => {
   try {
     if (req.session && req.session.user) {
       req.session.destroy()
@@ -126,12 +127,12 @@ exports.logout = async (req: RequestWithSession<UserCredits>, res: Response) => 
   }
 }
 
-exports.updateUserNameAndAvatar = async (req: RequestWithSession<UserDetails>, res: Response) => {
+export const updateUserNameAndAvatar = async (req: RequestWithSession<UserDetails>, res: Response) => {
   try {
     const updatedUserDetails: UserDetails = req.body
 
     const userEmail = req.session && req.session.user.userEmail
-    const userDetails: User = await UserModel
+    const userDetails: User | null = await UserModel
       .findOneAndUpdate({userEmail}, updatedUserDetails, {
         new: true,
         runValidators: true
@@ -141,8 +142,8 @@ exports.updateUserNameAndAvatar = async (req: RequestWithSession<UserDetails>, r
       status: 'success',
       data: {
         user: {
-          name: userDetails.name,
-          avatar: userDetails.avatar
+          name: userDetails?.name,
+          avatar: userDetails?.avatar
         }
       }
     })

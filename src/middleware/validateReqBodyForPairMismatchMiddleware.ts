@@ -3,7 +3,7 @@ import {RequestWithSession, Transaction} from "../utils/typescript/interfaces";
 import {decodePairIdToUserIds} from "../utils/functions/commons";
 import {STATUS_UNAUTHORIZED} from "../utils/constants/responseCodes";
 
-const validateReqBodyForPairMismatch = (req: RequestWithSession<Transaction>, res: Response, next: NextFunction) => {
+export const validateReqBodyForPairMismatch = (req: RequestWithSession<Transaction>, res: Response, next: NextFunction) => {
   const pairId = req.params.pairId
   const transactionFromReq: Transaction = req.body
 
@@ -19,5 +19,3 @@ const validateReqBodyForPairMismatch = (req: RequestWithSession<Transaction>, re
 
   next()
 }
-
-module.exports = validateReqBodyForPairMismatch

@@ -2,7 +2,7 @@ import {NextFunction, Response} from "express";
 import {RequestWithSession} from "../utils/typescript/interfaces";
 import {STATUS_UNAUTHORIZED} from "../utils/constants/responseCodes";
 
-const protectUser = (req: RequestWithSession<{}>, res: Response, next: NextFunction) => {
+export const protectUser = (req: RequestWithSession<{}>, res: Response, next: NextFunction) => {
   const user = req.session && req.session.user
 
   if (!user) {
@@ -12,5 +12,3 @@ const protectUser = (req: RequestWithSession<{}>, res: Response, next: NextFunct
 
   next()
 }
-
-module.exports = protectUser

@@ -1,6 +1,5 @@
 import {UserDetails, UserEmailToDetails} from "../typescript/interfaces";
-
-const UserModel = require("../../models/userModel")
+import {UserModel} from "../../models/userModel";
 
 export const retrieveUsersDetails = async (userEmails: Array<string>): Promise<UserEmailToDetails> => {
   /**

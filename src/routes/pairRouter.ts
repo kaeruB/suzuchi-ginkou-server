@@ -1,25 +1,31 @@
-import {Router} from "express";
+// @ts-nocheck
 
-const pairController = require("../controllers/pairController")
-const transactionController = require("../controllers/transactionController")
-const protectUser = require('../middleware/userAuthMiddleware')
-const protectPair = require('../middleware/pairAuthMiddleware')
-const validateReqBodyForPairMismatch = require('../middleware/validateReqBodyForPairMismatchMiddleware')
+import {Router} from "express";
+import {
+  createTransaction,
+  deleteTransaction,
+  getTransactionsSummary,
+  updateTransaction
+} from "../controllers/transactionController";
+import {createPair, getPairsSummaries} from "../controllers/pairController";
+import {protectPair} from "../middleware/pairAuthMiddleware";
+import {validateReqBodyForPairMismatch} from "../middleware/validateReqBodyForPairMismatchMiddleware";
+import {protectUser} from "../middleware/userAuthMiddleware";
 
 const router = Router()
 
 router.route("/:pairId/transactions")
-  .post(protectUser, protectPair, validateReqBodyForPairMismatch, transactionController.createTransaction)
+  .post(protectUser, protectPair, validateReqBodyForPairMismatch, createTransaction)
 
 router.route("/:pairId/transactions/:id")
-  .patch(protectUser, protectPair, validateReqBodyForPairMismatch, transactionController.updateTransaction)
-  .delete(protectUser, protectPair, transactionController.deleteTransaction)
+  .patch(protectUser, protectPair, validateReqBodyForPairMismatch, updateTransaction)
+  .delete(protectUser, protectPair, deleteTransaction)
 
 router.route("/:pairId/transactions/summary")
-  .get(protectUser, protectPair, transactionController.getTransactionsSummary)
+  .get(protectUser, protectPair, getTransactionsSummary)
 
 router.route("/")
-  .get(protectUser, pairController.getPairsSummaries)
-  .post(protectUser, pairController.createPair)
+  .get(protectUser, getPairsSummaries)
+  .post(protectUser, createPair)
 
-module.exports = router
+export default router

@@ -3,7 +3,7 @@ import {RequestWithSession} from "../utils/typescript/interfaces";
 import {decodePairIdToUserIds} from "../utils/functions/commons";
 import {STATUS_UNAUTHORIZED} from "../utils/constants/responseCodes";
 
-const protectPair = (req: RequestWithSession<{}>, res: Response, next: NextFunction) => {
+export const protectPair = (req: RequestWithSession<{}>, res: Response, next: NextFunction) => {
   const user = req.session && req.session.user
   const pairId = req.params.pairId
 
@@ -19,5 +19,3 @@ const protectPair = (req: RequestWithSession<{}>, res: Response, next: NextFunct
 
   next()
 }
-
-module.exports = protectPair
